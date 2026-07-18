@@ -1,0 +1,2 @@
+# Git Merge Conflict Visualizer
+
