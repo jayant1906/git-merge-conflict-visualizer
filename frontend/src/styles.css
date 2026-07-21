@@ -23,3 +23,64 @@ p {
   margin: 0;
   font-size: 18px;
 }
+
+.upload-box {
+  width: min(100%, 420px);
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: left;
+}
+
+.upload-box form {
+  display: grid;
+  gap: 12px;
+}
+
+.upload-box label {
+  font-weight: 700;
+}
+
+.upload-box input {
+  font: inherit;
+}
+
+.upload-box button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.upload-box button:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.file-name,
+.error-message,
+.repository-result {
+  margin-top: 12px;
+}
+
+.error-message {
+  color: #b91c1c;
+}
+
+.repository-result {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.repository-result h2 {
+  margin: 0;
+  font-size: 20px;
+}
