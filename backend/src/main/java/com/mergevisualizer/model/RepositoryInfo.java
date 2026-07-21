@@ -15,12 +15,12 @@ public class RepositoryInfo {
     public RepositoryInfo(){
     }
 
-    public RepositoryInfo(String name, String path, boolean success, String msg){
+    public RepositoryInfo(String name, String path, boolean success, String msg, String uId){
         this.repoName = name;
         this.repoPath = path;
         this.uploadedSuccessfully = success;
         this.message = msg;
-        this.uId = UUID.randomUUID().toString();
+        this.uId = uId;
         this.fileCount = 0;   
     }
 
@@ -58,6 +58,10 @@ public class RepositoryInfo {
 
     public String getuId() {
         return uId;
+    }
+
+    public void setUId(String uId) {
+        this.uId = uId;
     }
 
     public int getFileCount() {
