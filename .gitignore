@@ -13,5 +13,8 @@ dist/
 build/
 target/
 
+# Generated uploads
+backend/uploads/
+
 # OS files
 .DS_Store

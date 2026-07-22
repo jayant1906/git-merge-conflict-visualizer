@@ -44,7 +44,18 @@ public class UploadService {
             throw new IOException("Extracted path is not a directory: " + extractedFolder);
         }
         try (Stream<Path> paths = Files.walk(extractedFolder)) {
-            return (int) paths.filter(Files::isRegularFile).count();
+            return (int) paths
+                .filter(Files::isRegularFile)
+                .filter(path -> !isMacMetadataFile(path))
+                .count();
         }
+    }
+
+    private boolean isMacMetadataFile(Path path) {
+        String fileName = path.getFileName().toString();
+
+        return fileName.equals(".DS_Store")
+            || fileName.startsWith("._")
+            || path.toString().contains("__MACOSX");
     }
 }
