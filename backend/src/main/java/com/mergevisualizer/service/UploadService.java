@@ -46,16 +46,19 @@ public class UploadService {
         try (Stream<Path> paths = Files.walk(extractedFolder)) {
             return (int) paths
                 .filter(Files::isRegularFile)
-                .filter(path -> !isMacMetadataFile(path))
+                .filter(path -> !isSystemMetadataFile(path))
                 .count();
         }
     }
 
-    private boolean isMacMetadataFile(Path path) {
+    private boolean isSystemMetadataFile(Path path) {
         String fileName = path.getFileName().toString();
+        String lowerFileName = fileName.toLowerCase();
 
         return fileName.equals(".DS_Store")
             || fileName.startsWith("._")
-            || path.toString().contains("__MACOSX");
+            || path.toString().contains("__MACOSX")
+            || lowerFileName.equals("thumbs.db")
+            || lowerFileName.equals("desktop.ini");
     }
 }
