@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { uploadRepository } from "../services/api";
+import BranchSelector from "./BranchSelector/BranchSelector";
 
 function UploadBox() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -60,6 +61,7 @@ function UploadBox() {
                     <p>{repositoryInfo.message}</p>
                     <p>Files extracted: {repositoryInfo.fileCount}</p>
                     <p>ID: {repositoryInfo.uId}</p>
+                    <BranchSelector repositoryId={repositoryInfo.uId} />
                 </div>
             )}
         </section>

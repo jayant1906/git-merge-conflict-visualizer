@@ -84,3 +84,28 @@ p {
   margin: 0;
   font-size: 20px;
 }
+
+.branch-selector {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.branch-selector label {
+  font-weight: 700;
+}
+
+.branch-selector select {
+  min-height: 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #1f2937;
+  font: inherit;
+}
+
+.branch-selector-status {
+  margin-top: 12px;
+  color: #4b5563;
+}
