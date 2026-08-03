@@ -42,7 +42,7 @@ public class GitService {
         }
     }
 
-    private Path findRepositoryRoot(Path extractedFolder) throws IOException{
+    public Path findRepositoryRoot(Path extractedFolder) throws IOException{
         Path gitFolder = extractedFolder.resolve(".git");
         if (Files.isDirectory(gitFolder)) {
             return extractedFolder;
