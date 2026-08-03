@@ -85,27 +85,73 @@ p {
   font-size: 20px;
 }
 
-.branch-selector {
+.branch-selector,
+.merge-form {
   display: grid;
   gap: 8px;
+}
+
+.branch-selector {
   margin-top: 12px;
 }
 
-.branch-selector label {
+.branch-selector label,
+.merge-form label {
   font-weight: 700;
 }
 
-.branch-selector select {
+.branch-selector select,
+.merge-form button {
   min-height: 40px;
-  border: 1px solid #d1d5db;
   border-radius: 6px;
+  font: inherit;
+}
+
+.branch-selector select {
+  border: 1px solid #d1d5db;
   padding: 0 10px;
   background: #ffffff;
   color: #1f2937;
-  font: inherit;
+}
+
+.merge-form button {
+  margin-top: 4px;
+  border: 0;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.merge-form button:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
 }
 
 .branch-selector-status {
   margin-top: 12px;
   color: #4b5563;
+}
+
+.merge-result {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.merge-result ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.success-message {
+  color: #047857;
+  font-weight: 700;
+}
+
+.conflict-message {
+  color: #b91c1c;
+  font-weight: 700;
 }

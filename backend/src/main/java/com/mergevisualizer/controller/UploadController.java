@@ -39,6 +39,7 @@ public class UploadController {
     @GetMapping("/repositories/{repositoryId}/branches")
     public List<BranchInfo> getBranches(@PathVariable String repositoryId) throws IOException, GitAPIException {
         Path repositoryPath = Path.of("uploads", repositoryId, "extracted");
-        return gitService.getBranches(repositoryPath);
+        Path repoRoot = gitService.findRepositoryRoot(repositoryPath);
+        return gitService.getBranches(repoRoot);
     }
 }

@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
-
-const API_BASE_URL = "http://localhost:8080/api";
+import { getBranches, mergeBranches } from "../../services/api";
 
 function BranchSelector({ repositoryId }) {
     const [branches, setBranches] = useState([]);
+    const [sourceBranch, setSourceBranch] = useState("");
+    const [targetBranch, setTargetBranch] = useState("");
+    const [mergeResult, setMergeResult] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isMerging, setIsMerging] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
         setBranches([]);
+        setSourceBranch("");
+        setTargetBranch("");
+        setMergeResult(null);
         setError("");
 
         if (!repositoryId) {
@@ -20,16 +26,10 @@ function BranchSelector({ repositoryId }) {
 
         async function loadBranches() {
             try {
-                const response = await fetch(
-                    `${API_BASE_URL}/repositories/${repositoryId}/branches`
-                );
-
-                if (!response.ok) {
-                    throw new Error("Failed to load branches");
-                }
-
-                const branchData = await response.json();
+                const branchData = await getBranches(repositoryId);
                 setBranches(branchData);
+                setTargetBranch(branchData.find((branch) => branch.current)?.name || branchData[0]?.name || "");
+                setSourceBranch(branchData.find((branch) => !branch.current)?.name || branchData[1]?.name || "");
             } catch (loadError) {
                 setError(loadError.message);
             } finally {
@@ -39,6 +39,33 @@ function BranchSelector({ repositoryId }) {
 
         loadBranches();
     }, [repositoryId]);
+
+    async function handleMerge(event) {
+        event.preventDefault();
+
+        if (!sourceBranch || !targetBranch) {
+            setError("Choose both branches before merging.");
+            return;
+        }
+
+        if (sourceBranch === targetBranch) {
+            setError("Choose two different branches.");
+            return;
+        }
+
+        setIsMerging(true);
+        setMergeResult(null);
+        setError("");
+
+        try {
+            const result = await mergeBranches(repositoryId, sourceBranch, targetBranch);
+            setMergeResult(result);
+        } catch (mergeError) {
+            setError(mergeError.message);
+        } finally {
+            setIsMerging(false);
+        }
+    }
 
     if (isLoading) {
         return <p className="branch-selector-status">Loading branches...</p>;
@@ -55,13 +82,53 @@ function BranchSelector({ repositoryId }) {
     return (
         <div className="branch-selector">
             <h2>Branches</h2>
-            <ul>
-                {branches.map((branch) => (
-                    <li key={branch.name}>
-                        {branch.current ? `${branch.name} (current)` : branch.name}
-                    </li>
-                ))}
-            </ul>
+            <form className="merge-form" onSubmit={handleMerge}>
+                <label htmlFor="target-branch">Target branch</label>
+                <select
+                    id="target-branch"
+                    value={targetBranch}
+                    onChange={(event) => setTargetBranch(event.target.value)}
+                >
+                    {branches.map((branch) => (
+                        <option key={branch.name} value={branch.name}>
+                            {branch.current ? `${branch.name} (current)` : branch.name}
+                        </option>
+                    ))}
+                </select>
+
+                <label htmlFor="source-branch">Source branch</label>
+                <select
+                    id="source-branch"
+                    value={sourceBranch}
+                    onChange={(event) => setSourceBranch(event.target.value)}
+                >
+                    <option value="">Choose a branch</option>
+                    {branches.map((branch) => (
+                        <option key={branch.name} value={branch.name}>
+                            {branch.current ? `${branch.name} (current)` : branch.name}
+                        </option>
+                    ))}
+                </select>
+
+                <button type="submit" disabled={isMerging}>
+                    {isMerging ? "Merging..." : "Merge"}
+                </button>
+            </form>
+
+            {mergeResult && (
+                <div className="merge-result">
+                    <p className={mergeResult.hasConflicts ? "conflict-message" : "success-message"}>
+                        {mergeResult.hasConflicts ? "Conflict Found" : mergeResult.message}
+                    </p>
+                    {mergeResult.conflictFiles?.length > 0 && (
+                        <ul>
+                            {mergeResult.conflictFiles.map((file) => (
+                                <li key={file}>{file}</li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

@@ -22,6 +22,6 @@ public class MergeController {
 
     @PostMapping("/merge")
     public MergeResponse mergeBranches(@RequestBody MergeRequest request) {
-        return null;
+        return mergeService.mergeBranches(request);
     }
 }
