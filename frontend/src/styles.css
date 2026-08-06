@@ -25,7 +25,7 @@ p {
 }
 
 .upload-box {
-  width: min(100%, 420px);
+  width: min(100%, 960px);
   margin-top: 16px;
   padding: 20px;
   border: 1px solid #d1d5db;
@@ -154,4 +154,150 @@ p {
 .conflict-message {
   color: #b91c1c;
   font-weight: 700;
+}
+
+.results-page {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 1100px);
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: left;
+}
+
+.results-page h2,
+.results-page h3 {
+  margin: 0;
+}
+
+.results-page h2 {
+  font-size: 24px;
+}
+
+.results-page h3 {
+  font-size: 18px;
+}
+
+.results-conflicts {
+  display: grid;
+  gap: 8px;
+}
+
+.results-conflicts ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.conflict-list {
+  display: grid;
+  gap: 12px;
+}
+
+.conflict-list-empty {
+  color: #4b5563;
+}
+
+.conflict-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.conflict-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.conflict-file-name {
+  font-weight: 700;
+}
+
+.conflict-number {
+  margin-top: 4px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.conflict-card button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.side-by-side-diff {
+  display: flex;
+  gap: 16px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 12px;
+  width: 100%;
+}
+
+.diff-column {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.diff-column h4 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.diff-code {
+  min-height: 240px;
+  max-height: 520px;
+  margin: 0;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #111827;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  min-width: max-content;
+}
+
+.diff-line-number {
+  padding: 0 10px;
+  border-right: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  color: #6b7280;
+  text-align: right;
+  user-select: none;
+}
+
+.diff-line code {
+  padding: 0 12px;
+  color: #111827;
+  font: inherit;
+  white-space: pre;
+}
+
+@media (max-width: 640px) {
+  .conflict-card-header,
+  .side-by-side-diff {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getBranches, mergeBranches } from "../../services/api";
+import ConflictList from "../ConflictViewer/ConflictList";
 
 function BranchSelector({ repositoryId }) {
     const [branches, setBranches] = useState([]);
@@ -120,13 +121,7 @@ function BranchSelector({ repositoryId }) {
                     <p className={mergeResult.hasConflicts ? "conflict-message" : "success-message"}>
                         {mergeResult.hasConflicts ? "Conflict Found" : mergeResult.message}
                     </p>
-                    {mergeResult.conflictFiles?.length > 0 && (
-                        <ul>
-                            {mergeResult.conflictFiles.map((file) => (
-                                <li key={file}>{file}</li>
-                            ))}
-                        </ul>
-                    )}
+                    {mergeResult.hasConflicts && <ConflictList conflicts={mergeResult.conflicts} />}
                 </div>
             )}
         </div>

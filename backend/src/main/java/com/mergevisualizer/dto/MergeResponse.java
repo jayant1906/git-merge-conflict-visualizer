@@ -1,5 +1,7 @@
 package com.mergevisualizer.dto;
 
+import com.mergevisualizer.model.Conflict;
+
 import java.util.List;
 
 public class MergeResponse {
@@ -7,6 +9,7 @@ public class MergeResponse {
     private boolean hasConflicts;
     private String message;
     private List<String> conflictFiles;
+    private List<Conflict> conflicts;
 
     public MergeResponse() {
     }
@@ -43,6 +46,14 @@ public class MergeResponse {
         this.conflictFiles = conflictFiles;
     }
 
+    public List<Conflict> getConflicts() {
+        return conflicts;
+    }
+
+    public void setConflicts(List<Conflict> conflicts) {
+        this.conflicts = conflicts;
+    }
+
     @Override
     public String toString() {
         return "MergeResponse{" +
@@ -50,6 +61,7 @@ public class MergeResponse {
                 ", hasConflicts=" + hasConflicts +
                 ", message='" + message + '\'' +
                 ", conflictFiles=" + conflictFiles +
+                ", conflicts=" + conflicts +
                 '}';
     }
 }

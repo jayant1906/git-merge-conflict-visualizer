@@ -2,6 +2,7 @@ package com.mergevisualizer.service;
 
 import com.mergevisualizer.dto.MergeRequest;
 import com.mergevisualizer.dto.MergeResponse;
+import com.mergevisualizer.model.Conflict;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.ResetCommand;
@@ -18,9 +19,11 @@ import java.util.Map;
 public class MergeService {
 
     private final GitService gitService;
+    private final ConflictService conflictService;
 
-    public MergeService(GitService gitService) {
+    public MergeService(GitService gitService, ConflictService conflictService) {
         this.gitService = gitService;
+        this.conflictService = conflictService;
     }
 
     public MergeResponse mergeBranches(MergeRequest request) {
@@ -66,7 +69,8 @@ public class MergeService {
                         if (conflicts != null) {
                             conflictFiles.addAll(conflicts.keySet());
                         }
-                        return createResponse(false, true, "Merge has conflicts", conflictFiles);
+                        List<Conflict> parsedConflicts = conflictService.getConflicts(repoRoot, conflictFiles);
+                        return createResponse(false, true, "Merge has conflicts", conflictFiles, parsedConflicts);
                     }
 
                     return createResponse(false, false, "Merge failed: " + mergeStatus, List.of());
@@ -82,11 +86,17 @@ public class MergeService {
     }
 
     private MergeResponse createResponse(boolean successful, boolean hasConflicts, String message, List<String> conflictFiles) {
+        return createResponse(successful, hasConflicts, message, conflictFiles, List.of());
+    }
+
+    private MergeResponse createResponse(boolean successful, boolean hasConflicts, String message,
+                                         List<String> conflictFiles, List<Conflict> conflicts) {
         MergeResponse response = new MergeResponse();
         response.setSuccessful(successful);
         response.setHasConflicts(hasConflicts);
         response.setMessage(message);
         response.setConflictFiles(conflictFiles);
+        response.setConflicts(conflicts);
         return response;
     }
 }
