@@ -2,6 +2,15 @@ import { useState } from "react";
 
 const API_BASE_URL = "http://localhost:8080/api";
 
+async function getErrorMessage(response, fallbackMessage) {
+    try {
+        const errorBody = await response.json();
+        return errorBody.message || fallbackMessage;
+    } catch (error) {
+        return fallbackMessage;
+    }
+}
+
 function DownloadButton({ repositoryId, sourceBranch, targetBranch, mergeResult }) {
     const [isDownloading, setIsDownloading] = useState(false);
     const [error, setError] = useState("");
@@ -30,7 +39,7 @@ function DownloadButton({ repositoryId, sourceBranch, targetBranch, mergeResult 
             });
 
             if (!response.ok) {
-                throw new Error("Failed to download report");
+                throw new Error(await getErrorMessage(response, "Failed to download report"));
             }
 
             const reportBlob = await response.blob();

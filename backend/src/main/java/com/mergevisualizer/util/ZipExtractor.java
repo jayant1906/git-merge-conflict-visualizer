@@ -20,9 +20,12 @@ public final class ZipExtractor{
             throw new IOException("Failed to create directory " + destDirectory);
         }
         byte[] buffer = new byte[1024];
+        boolean extractedEntry = false;
+
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipfile.toFile()))) {
             ZipEntry zipEntry = zis.getNextEntry();
             while(zipEntry != null){
+                extractedEntry = true;
                 File newFile = new File(destDirectory, zipEntry.getName());
                 String destDirPath = destDirectory.getCanonicalPath();
                 String newFilePath = newFile.getCanonicalPath();
@@ -49,6 +52,10 @@ public final class ZipExtractor{
                 }
                 zipEntry = zis.getNextEntry();
             }
+        }
+
+        if (!extractedEntry) {
+            throw new IOException("Invalid ZIP file. Please upload a valid .zip archive.");
         }
     }
 }

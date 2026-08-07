@@ -34,6 +34,10 @@ public class ReportController {
         String targetBranch = String.valueOf(request.get("targetBranch"));
         MergeResponse mergeResponse = objectMapper.convertValue(request.get("mergeResult"), MergeResponse.class);
 
+        if (mergeResponse == null) {
+            throw new IllegalArgumentException("Merge result is required to generate a report.");
+        }
+
         String reportHtml = reportService.generateReportHtml(repositoryId, sourceBranch, targetBranch, mergeResponse);
 
         return ResponseEntity.ok()

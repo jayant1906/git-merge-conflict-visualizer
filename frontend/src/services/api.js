@@ -1,10 +1,23 @@
 const API_BASE_URL = "http://localhost:8080/api";
 
+async function throwApiError(response, fallbackMessage) {
+    try {
+        const errorBody = await response.json();
+        throw new Error(errorBody.message || fallbackMessage);
+    } catch (error) {
+        if (error instanceof SyntaxError) {
+            throw new Error(fallbackMessage);
+        }
+
+        throw error;
+    }
+}
+
 export async function getHealthStatus() {
     const response = await fetch(`${API_BASE_URL}/health`);
 
     if (!response.ok) {
-        throw new Error("Failed to reach backend");
+        await throwApiError(response, "Failed to reach backend");
     }
 
     return response.text();
@@ -20,7 +33,7 @@ export async function uploadRepository(file) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to upload repository");
+        await throwApiError(response, "Failed to upload repository");
     }
 
     return response.json();
@@ -30,7 +43,7 @@ export async function getBranches(repositoryId) {
     const response = await fetch(`${API_BASE_URL}/repositories/${repositoryId}/branches`);
 
     if (!response.ok) {
-        throw new Error("Failed to load branches");
+        await throwApiError(response, "Failed to load branches");
     }
 
     return response.json();
@@ -50,7 +63,7 @@ export async function mergeBranches(repositoryId, sourceBranch, targetBranch) {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to simulate merge");
+        await throwApiError(response, "Failed to simulate merge");
     }
 
     return response.json();

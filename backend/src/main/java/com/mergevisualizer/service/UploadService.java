@@ -15,19 +15,20 @@ import java.util.stream.Stream;
 public class UploadService {
 
     public RepositoryInfo uploadRepository(MultipartFile uploadedZip) throws IOException {
-        if(uploadedZip.isEmpty() || !uploadedZip.getOriginalFilename().endsWith(".zip")){
+        String originalFilename = uploadedZip.getOriginalFilename();
+        if(uploadedZip.isEmpty() || originalFilename == null || !originalFilename.toLowerCase().endsWith(".zip")){
             throw new IllegalArgumentException("Invalid file. Please upload a .zip file.");
         }
         String uniqueId = UUID.randomUUID().toString();
         Path uploadFolder = Files.createDirectories(Path.of("uploads", uniqueId));
-        Path zipPath = uploadFolder.resolve(uploadedZip.getOriginalFilename());
+        Path zipPath = uploadFolder.resolve(originalFilename);
         uploadedZip.transferTo(zipPath);
 
         Path extractedFolder = Files.createDirectories(Path.of("uploads", uniqueId, "extracted"));
         ZipExtractor.extract(zipPath, extractedFolder);
         int fileCount = countExtractedFiles(extractedFolder);
         
-        RepositoryInfo newRepo = new RepositoryInfo(uploadedZip.getOriginalFilename(), extractedFolder.toString(), true, 
+        RepositoryInfo newRepo = new RepositoryInfo(originalFilename, extractedFolder.toString(), true, 
             "Successful", uniqueId);
         newRepo.setFileCount(fileCount);
         return newRepo;

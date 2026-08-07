@@ -27,7 +27,12 @@ public class MergeService {
     }
 
     public MergeResponse mergeBranches(MergeRequest request) {
-        String repoId = request.getRepositoryId();
+        String validationError = validateMergeRequest(request);
+        if (validationError != null) {
+            return createResponse(false, false, validationError, List.of());
+        }
+
+        String repoId = request.getRepositoryId().trim();
         Path repositoryPath = Path.of("uploads", repoId, "extracted");
 
         try {
@@ -37,8 +42,8 @@ public class MergeService {
                 boolean shouldReset = false;
 
                 try {
-                    String target = request.getTargetBranch();
-                    String source = request.getSourceBranch();
+                    String target = request.getTargetBranch().trim();
+                    String source = request.getSourceBranch().trim();
 
                     boolean targetBranchExistsLocally = git.branchList().call().stream()
                             .anyMatch(ref -> ref.getName().equals("refs/heads/" + target));
@@ -83,6 +88,34 @@ public class MergeService {
         } catch (Exception exception) {
             return createResponse(false, false, exception.getMessage(), List.of());
         }
+    }
+
+    private String validateMergeRequest(MergeRequest request) {
+        if (request == null) {
+            return "Merge request is required.";
+        }
+
+        if (isBlank(request.getRepositoryId())) {
+            return "Repository ID is required.";
+        }
+
+        if (isBlank(request.getSourceBranch())) {
+            return "Source branch is required.";
+        }
+
+        if (isBlank(request.getTargetBranch())) {
+            return "Target branch is required.";
+        }
+
+        if (request.getSourceBranch().trim().equals(request.getTargetBranch().trim())) {
+            return "Choose two different branches.";
+        }
+
+        return null;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
     private MergeResponse createResponse(boolean successful, boolean hasConflicts, String message, List<String> conflictFiles) {
