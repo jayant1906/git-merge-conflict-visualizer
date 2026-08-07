@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getBranches, mergeBranches } from "../../services/api";
 import ConflictList from "../ConflictViewer/ConflictList";
+import DownloadButton from "../Report/DownloadButton";
 
 function BranchSelector({ repositoryId }) {
     const [branches, setBranches] = useState([]);
@@ -122,6 +123,12 @@ function BranchSelector({ repositoryId }) {
                         {mergeResult.hasConflicts ? "Conflict Found" : mergeResult.message}
                     </p>
                     {mergeResult.hasConflicts && <ConflictList conflicts={mergeResult.conflicts} />}
+                    <DownloadButton
+                        repositoryId={repositoryId}
+                        sourceBranch={sourceBranch}
+                        targetBranch={targetBranch}
+                        mergeResult={mergeResult}
+                    />
                 </div>
             )}
         </div>
