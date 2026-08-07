@@ -48,7 +48,8 @@ function UploadBox() {
                     onChange={handleFileChange}
                 />
                 <button type="submit" disabled={isUploading}>
-                    {isUploading ? "Uploading..." : "Upload"}
+                    {isUploading && <span className="spinner" aria-hidden="true"></span>}
+                    {isUploading ? "Uploading repository..." : "Upload"}
                 </button>
             </form>
 
@@ -59,7 +60,6 @@ function UploadBox() {
                 <div className="repository-result">
                     <h2>{repositoryInfo.repoName}</h2>
                     <p>{repositoryInfo.message}</p>
-                    <p>Files extracted: {repositoryInfo.fileCount}</p>
                     <p>ID: {repositoryInfo.uId}</p>
                     <BranchSelector repositoryId={repositoryInfo.uId} />
                 </div>

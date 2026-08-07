@@ -70,7 +70,12 @@ function BranchSelector({ repositoryId }) {
     }
 
     if (isLoading) {
-        return <p className="branch-selector-status">Loading branches...</p>;
+        return (
+            <p className="branch-selector-status">
+                <span className="spinner spinner-inline" aria-hidden="true"></span>
+                Reading branches...
+            </p>
+        );
     }
 
     if (error) {
@@ -113,7 +118,8 @@ function BranchSelector({ repositoryId }) {
                 </select>
 
                 <button type="submit" disabled={isMerging}>
-                    {isMerging ? "Merging..." : "Merge"}
+                    {isMerging && <span className="spinner" aria-hidden="true"></span>}
+                    {isMerging ? "Simulating merge..." : "Merge"}
                 </button>
             </form>
 

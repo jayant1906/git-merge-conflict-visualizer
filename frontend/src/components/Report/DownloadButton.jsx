@@ -62,7 +62,8 @@ function DownloadButton({ repositoryId, sourceBranch, targetBranch, mergeResult 
     return (
         <div className="download-report">
             <button type="button" onClick={handleDownload} disabled={isDownloading}>
-                {isDownloading ? "Downloading..." : "Download Report"}
+                {isDownloading && <span className="spinner" aria-hidden="true"></span>}
+                {isDownloading ? "Generating report..." : "Download Report"}
             </button>
 
             {error && <p className="error-message">{error}</p>}

@@ -28,8 +28,8 @@ public class UploadService {
         ZipExtractor.extract(zipPath, extractedFolder);
         int fileCount = countExtractedFiles(extractedFolder);
         
-        RepositoryInfo newRepo = new RepositoryInfo(originalFilename, extractedFolder.toString(), true, 
-            "Successful", uniqueId);
+        RepositoryInfo newRepo = new RepositoryInfo(originalFilename, extractedFolder.toString(), true,
+            "Upload successful", uniqueId);
         newRepo.setFileCount(fileCount);
         return newRepo;
     }
