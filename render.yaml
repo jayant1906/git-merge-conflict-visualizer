@@ -13,7 +13,6 @@ services:
   - type: web
     name: git-merge-conflict-visualizer-frontend
     runtime: static
-    plan: free
     repo: https://github.com/jayant1906/git-merge-conflict-visualizer
     branch: main
     rootDir: frontend
