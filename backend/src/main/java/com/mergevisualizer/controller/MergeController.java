@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://git-merge-conflict-visualizer-frontend.onrender.com"
+})
 public class MergeController {
 
     private final MergeService mergeService;
