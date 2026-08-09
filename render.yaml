@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: git-merge-conflict-visualizer-backend
+    runtime: docker
+    plan: free
+    repo: https://github.com/jayant1906/git-merge-conflict-visualizer
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
