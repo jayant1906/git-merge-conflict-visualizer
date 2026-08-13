@@ -1,13 +1,15 @@
 package com.mergevisualizer.util;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public final class ZipExtractor{
     private ZipExtractor(){
@@ -22,9 +24,18 @@ public final class ZipExtractor{
         byte[] buffer = new byte[1024];
         boolean extractedEntry = false;
 
-        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipfile.toFile()))) {
-            ZipEntry zipEntry = zis.getNextEntry();
-            while(zipEntry != null){
+        try (InputStream inputStream = Files.newInputStream(zipfile);
+             ZipArchiveInputStream zis = new ZipArchiveInputStream(
+                 new BufferedInputStream(inputStream),
+                 "UTF-8",
+                 true,
+                 true
+            )) {
+            ZipArchiveEntry zipEntry;
+            while((zipEntry = zis.getNextEntry()) != null){
+                if (!zis.canReadEntryData(zipEntry)) {
+                    throw new IOException("Unsupported ZIP entry: " + zipEntry.getName());
+                }
                 extractedEntry = true;
                 File newFile = new File(destDirectory, zipEntry.getName());
                 String destDirPath = destDirectory.getCanonicalPath();
@@ -50,7 +61,6 @@ public final class ZipExtractor{
                         }
                     }
                 }
-                zipEntry = zis.getNextEntry();
             }
         }
 
